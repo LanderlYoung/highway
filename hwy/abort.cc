@@ -65,7 +65,7 @@ HWY_DLLEXPORT AbortFunc SetAbortFunc(AbortFunc func) {
   return detail::AtomicAbortFunc().exchange(func);
 }
 
-HWY_DLLEXPORT void HWY_FORMAT(3, 4)
+HWY_HEADER_ONLY_FUN HWY_DLLEXPORT void HWY_FORMAT(3, 4)
     Warn(const char* file, int line, const char* format, ...) {
   char buf[800];
   va_list args;
