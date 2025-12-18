@@ -285,6 +285,10 @@ set(HWY_SOURCES
     hwy/x86_cpuid.h
 )
 
+add_library(hwy_headeronly INTERFACE)
+target_include_directories(hwy_headeronly INTERFACE ${CMAKE_CURRENT_LIST_DIR})
+target_compile_definitions(hwy_headeronly INTERFACE -DHWY_HEADER_ONLY)
+
 if (NOT HWY_CMAKE_HEADER_ONLY)
   list(APPEND HWY_SOURCES
     hwy/abort.cc
