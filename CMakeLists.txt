@@ -558,47 +558,37 @@ if (NOT HWY_CMAKE_HEADER_ONLY)
             LINK_FLAGS " -Wl,--version-script=${CMAKE_CURRENT_SOURCE_DIR}/hwy/hwy.version")
   endif ()
 else()
-  # to uncomment this, finally
-#  add_library(hwy INTERFACE)
-#  target_compile_definitions(hwy INTERFACE -DHWY_HEADER_ONLY=1)
-#  if (HWY_WARNINGS_ARE_ERRORS)
-#    target_include_directories(hwy INTERFACE
-#            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
-#            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-#  else()
-#    target_include_directories(hwy SYSTEM INTERFACE
-#            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
-#            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-#  endif ()
-#  target_link_libraries(hwy INTERFACE ${ATOMICS_LIBRARIES})
+    add_library(hwy INTERFACE)
+    target_compile_definitions(hwy INTERFACE -DHWY_HEADER_ONLY=1)
+    if (HWY_WARNINGS_ARE_ERRORS)
+        target_include_directories(hwy INTERFACE
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    else ()
+        target_include_directories(hwy SYSTEM INTERFACE
+                $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+                $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+    endif ()
+    target_link_libraries(hwy INTERFACE ${ATOMICS_LIBRARIES})
 
-  add_library(hwy STATIC)
-  target_compile_features(hwy PUBLIC cxx_std_11)
-  if (NOT HWY_CXX_STD_TGT_COMPILE_FEATURE STREQUAL "cxx_std_11")
-    target_compile_features(hwy PRIVATE ${HWY_CXX_STD_TGT_COMPILE_FEATURE})
-  endif ()
-  target_compile_definitions(hwy PUBLIC -DHWY_HEADER_ONLY=1)
-  if (HWY_WARNINGS_ARE_ERRORS)
-    target_include_directories(hwy PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-  else ()
-    target_include_directories(hwy SYSTEM PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
-            $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
-  endif ()
-  target_link_libraries(hwy PRIVATE ${ATOMICS_LIBRARIES})
-  target_sources(hwy PRIVATE
-#          hwy/abort.cc
-#          hwy/aligned_allocator.cc
-#          hwy/nanobenchmark.cc
-          hwy/per_target.cc
-#          hwy/perf_counters.cc
-#          hwy/print.cc
-#          hwy/profiler.cc
-#          hwy/targets.cc
-#          hwy/timer.cc
-  )
+
+    #  add_library(hwy STATIC)
+#  target_compile_definitions(hwy PUBLIC -DHWY_HEADER_ONLY)
+#  target_include_directories(hwy PUBLIC
+#          $<BUILD_INTERFACE:${CMAKE_CURRENT_LIST_DIR}>
+#          $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+#  target_link_libraries(hwy PRIVATE ${ATOMICS_LIBRARIES})
+#  target_sources(hwy PRIVATE
+##          hwy/abort.cc
+##          hwy/aligned_allocator.cc
+##          hwy/nanobenchmark.cc
+##          hwy/per_target.cc
+##          hwy/perf_counters.cc
+##          hwy/print.cc
+##          hwy/profiler.cc
+##          hwy/targets.cc
+##          hwy/timer.cc
+#  )
 endif ()
 
 if (HWY_ENABLE_CONTRIB)

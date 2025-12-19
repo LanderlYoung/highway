@@ -29,48 +29,84 @@
 
 HWY_BEFORE_NAMESPACE();
 namespace hwy {
+namespace detail {
 namespace HWY_NAMESPACE {
-namespace {
+HWY_HEADER_ONLY_FUN
 int64_t GetTarget() { return HWY_TARGET; }
-size_t GetVectorBytes() { return Lanes(ScalableTag<uint8_t>()); }
+HWY_HEADER_ONLY_FUN
+size_t GetVectorBytes() {
+  namespace hn = ::hwy::HWY_NAMESPACE;
+  return hn::Lanes(hn::ScalableTag<uint8_t>());
+}
+HWY_HEADER_ONLY_FUN
 bool GetHaveInteger64() { return HWY_HAVE_INTEGER64 != 0; }
+HWY_HEADER_ONLY_FUN
 bool GetHaveFloat16() { return HWY_HAVE_FLOAT16 != 0; }
+HWY_HEADER_ONLY_FUN
 bool GetHaveFloat64() { return HWY_HAVE_FLOAT64 != 0; }
-}  // namespace
 // NOLINTNEXTLINE(google-readability-namespace-comments)
 }  // namespace HWY_NAMESPACE
-
+}  // namespace detail
 }  // namespace hwy
 HWY_AFTER_NAMESPACE();
 
 #if HWY_ONCE
 namespace hwy {
-namespace {
-HWY_EXPORT(GetTarget);
-HWY_EXPORT(GetVectorBytes);
-HWY_EXPORT(GetHaveInteger64);
-HWY_EXPORT(GetHaveFloat16);
-HWY_EXPORT(GetHaveFloat64);
-}  // namespace
-
-HWY_DLLEXPORT int64_t DispatchedTarget() {
+namespace detail {
+HWY_HEADER_ONLY_FUN
+int64_t DispatchedTargetHelper() {
+  HWY_EXPORT(GetTarget);
   return HWY_DYNAMIC_DISPATCH(GetTarget)();
 }
 
-HWY_DLLEXPORT size_t VectorBytes() {
+HWY_HEADER_ONLY_FUN
+size_t VectorBytesHelper() {
+  HWY_EXPORT(GetVectorBytes);
   return HWY_DYNAMIC_DISPATCH(GetVectorBytes)();
 }
 
-HWY_DLLEXPORT bool HaveInteger64() {
+HWY_HEADER_ONLY_FUN
+bool HaveInteger64Helper() {
+  HWY_EXPORT(GetHaveInteger64);
   return HWY_DYNAMIC_DISPATCH(GetHaveInteger64)();
 }
 
-HWY_DLLEXPORT bool HaveFloat16() {
+HWY_HEADER_ONLY_FUN
+bool HaveFloat16Helper() {
+  HWY_EXPORT(GetHaveFloat16);
   return HWY_DYNAMIC_DISPATCH(GetHaveFloat16)();
 }
 
-HWY_DLLEXPORT bool HaveFloat64() {
+HWY_HEADER_ONLY_FUN
+bool HaveFloat64Helper() {
+  HWY_EXPORT(GetHaveFloat64);
   return HWY_DYNAMIC_DISPATCH(GetHaveFloat64)();
+}
+}
+
+HWY_HEADER_ONLY_FUN
+HWY_DLLEXPORT int64_t DispatchedTarget() {
+  return detail::DispatchedTargetHelper();
+}
+
+HWY_HEADER_ONLY_FUN
+HWY_DLLEXPORT size_t VectorBytes() {
+  return detail::VectorBytesHelper();
+}
+
+HWY_HEADER_ONLY_FUN
+HWY_DLLEXPORT bool HaveInteger64() {
+  return detail::HaveInteger64Helper();
+}
+
+HWY_HEADER_ONLY_FUN
+HWY_DLLEXPORT bool HaveFloat16() {
+  return detail::HaveFloat16Helper();
+}
+
+HWY_HEADER_ONLY_FUN
+HWY_DLLEXPORT bool HaveFloat64() {
+  return detail::HaveFloat64Helper();
 }
 
 }  // namespace hwy

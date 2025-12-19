@@ -20,6 +20,7 @@
 #include <stdint.h>
 
 #include "hwy/highway_export.h"
+#include "hwy/highway.h"
 
 // Functions to query the capabilities of the target that will be called by
 // HWY_DYNAMIC_DISPATCH, which is not necessarily the current target.
@@ -45,5 +46,25 @@ HWY_DLLEXPORT bool HaveFloat16();
 HWY_DLLEXPORT bool HaveFloat64();
 
 }  // namespace hwy
+
+#ifdef HWY_HEADER_ONLY
+// foreach_target.h is MAGICAL
+// save macros used by foreach_target.h
+HWY_PRAGMA(push_macro("HIGHWAY_HWY_FOREACH_TARGET_H_"))
+HWY_PRAGMA(push_macro("HWY_ALREADY_INCLUDED"))
+HWY_PRAGMA(push_macro("HWY_TARGET"))
+HWY_PRAGMA(push_macro("HWY_TARGET_INCLUDE"))
+HWY_PRAGMA(push_macro("HWY_ONCE"))
+HWY_PRAGMA(push_macro("HWY_TARGET_TOGGLE"))
+HWY_PRAGMA(push_macro("HWY_SET_MACROS_PER_TARGET"))
+#include "./per_target.cc"
+HWY_PRAGMA(pop_macro("HIGHWAY_HWY_FOREACH_TARGET_H_"))
+HWY_PRAGMA(pop_macro("HWY_ALREADY_INCLUDED"))
+HWY_PRAGMA(pop_macro("HWY_TARGET"))
+HWY_PRAGMA(pop_macro("HWY_TARGET_INCLUDE"))
+HWY_PRAGMA(pop_macro("HWY_ONCE"))
+HWY_PRAGMA(pop_macro("HWY_TARGET_TOGGLE"))
+HWY_PRAGMA(pop_macro("HWY_SET_MACROS_PER_TARGET"))
+#endif
 
 #endif  // HIGHWAY_HWY_PER_TARGET_H_

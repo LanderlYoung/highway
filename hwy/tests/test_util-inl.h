@@ -14,6 +14,7 @@
 // limitations under the License.
 
 // Target-specific helper functions for use by *_test.cc.
+#pragma once
 
 #include <stdio.h>
 
